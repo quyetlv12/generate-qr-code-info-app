@@ -1,19 +1,3 @@
-export const INFO_CONFIG = [
-    {
-        lable : 'Facebook',
-        fieldName : 'fb',
-    },
-    {
-        lable : 'Zalo',
-        fieldName : 'zl',
-    },
-    {
-        lable : 'Instagram',
-        fieldName : 'ig',
-    },
-]
-
-
 export const downloadQR = (BASE_URL , id) => {
     const canvas = document.getElementById("qrcode");
     const pngUrl = canvas

@@ -1,7 +1,7 @@
 export const defaultValue = {
     info : [
       {
-        label : "thong tin",
+        label : "Thông tin",
         value : ""
       }
     ]
