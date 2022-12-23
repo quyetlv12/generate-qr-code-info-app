@@ -1,12 +1,13 @@
 import React from "react";
 
-const Label = ({ content, onChange }) => {
+const Label = ({ content , className  ,
+  index  , update }) => {
   return (
     <span
       contentEditable="true"
-      className="underline outline-none focus:border-b-2 focus:border-b-sky-100"
+      className={`outline-none focus:border-b-2 focus:border focus:border-red-500 focus:px-3 ${className}`}
       onInput={(e) => {
-        console.log(e.target.innerText);
+        update(index , {label : e.target.innerText})
       }}
     >
       {content}

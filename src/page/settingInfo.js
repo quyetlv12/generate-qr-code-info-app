@@ -1,44 +1,31 @@
-import React, { useEffect, useState } from "react";
 import QRCode from "qrcode.react";
+import React from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import cancelIcon from "../asset/images/cancel.png";
 import Button from "../components/button";
 import Input from "../components/input";
 import Label from "../components/label";
-import { INFO_CONFIG } from "./utility";
+import { defaultValue } from "./hookFormConfig";
+import { downloadQR } from "./utility";
 const SettingInfo = () => {
   const params = useParams();
-  console.log("params", params.id);
-  const BASE_URL = process.env.REACT_APP_BASE_URL
-  console.log(process.env.REACT_APP_BASE_URL);
-  const [ArrayConfig, setArrayConfig] = useState(INFO_CONFIG);
+  const { register, handleSubmit, control } = useForm({
+    defaultValues :  defaultValue
+  });
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    name: "info",
+  });
+  const onSubmit = (data) => console.log(data);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const handleAddField = () => {
-    const configs = [...ArrayConfig];
-    const obj = {
-      lable: "Facebook",
-      fieldName: "fb",
-    };
-    configs.push(obj);
-    setArrayConfig(configs);
+    append({ label: "Thông tin", fieldName: "" });
   };
   const handleDeleteFied = (index) => {
-    const configs = [...ArrayConfig];
-    configs.splice(index, 1);
-    setArrayConfig(configs);
+    remove(index);
   };
-  const onChangeLabel = (content) => {};
-
-  const downloadQR = () => {
-    const canvas = document.getElementById("qrcode");
-    const pngUrl = canvas
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
-    let downloadLink = document.createElement("a");
-    downloadLink.href = pngUrl;
-    downloadLink.download = `${BASE_URL}-${params.id}.png`;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-  };
+  const onChangeLabel = (content) => {}; 
   return (
     <div className="mx-auto px-[10%] py-[2%]">
       <div className="flex justify-center mb-20">
@@ -48,22 +35,51 @@ const SettingInfo = () => {
       </div>
       <div className="flex">
         <div className="w-2/3">
-          {ArrayConfig.map((_elt, index) => (
-            <div key={index} className="mb-3">
-              <div className="flex justify-between">
-                <Label content={_elt.lable} onChange={onChangeLabel} />
-                {ArrayConfig.length === 1 ? null : (
-                  <button onClick={() => handleDeleteFied(index)}>X</button>
-                )}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {fields.map((_elt, index) => (
+              <div key={index} className="mb-3">
+                <div className="flex justify-between items-center">
+                  <Label
+                    content={_elt.label}
+                    onChange={onChangeLabel}
+                    index={index}
+                    update={update}
+                  />
+                  {fields.length === 1 ? null : (
+                    <button
+                      onClick={() => handleDeleteFied(index)}
+                      className={"h-[30px] w-[30px] text-center"}
+                    >
+                      <img src={cancelIcon} />
+                    </button>
+                  )}
+                </div>
+                <Input
+                  fieldName={_elt.fieldName}
+                  register={register}
+                  index={index}
+                />
               </div>
-              <Input fieldName={_elt.fieldName} />
-            </div>
-          ))}
-          {ArrayConfig.length === 10 ? null : (
-            <div className="flex justify-end">
-              <Button onChange={handleAddField} content="Thêm thông tin" />
-            </div>
-          )}
+            ))}
+            {fields.length === 10 ? null : (
+              <div className="flex justify-end gap-5">
+                <Button
+                  onChange={handleAddField}
+                  content="Thêm thông tin"
+                  className={
+                    "bg-gray-800 p-3 text-white rounded-md hover:bg-slate-700 transition-all duration-300"
+                  }
+                />
+                <Button
+                  type="submit"
+                  content="Lưu thông tin"
+                  className={
+                    "bg-green-800 p-3 text-white rounded-md hover:bg-slate-700 transition-all duration-300"
+                  }
+                />
+              </div>
+            )}
+          </form>
         </div>
         <div className="w-1/3">
           <div className="flex justify-center">
@@ -73,12 +89,12 @@ const SettingInfo = () => {
               level="H"
               title="RKEREW"
               style={{ height: "auto", maxWidth: "60%", width: "60%" }}
-              value={`${BASE_URL}/${params.id}`}
+              value={`${BASE_URL}${params.id}`}
               viewBox={`0 0 256 256`}
             />
           </div>
           <div className="flex justify-center mt-2">
-            <button onClick={downloadQR}>downloadQR</button>
+            <button onClick={() =>downloadQR(BASE_URL , params.id)}>downloadQR</button>
           </div>
         </div>
       </div>
