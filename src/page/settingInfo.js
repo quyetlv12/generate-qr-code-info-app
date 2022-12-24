@@ -1,8 +1,10 @@
 import QRCode from "qrcode.react";
 import React, { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import cancelIcon from "../asset/images/cancel.png";
+import downloadIcon from "../asset/images/download.png";
+import plusIcon from "../asset/images/plus.png";
+import submitIcon from "../asset/images/check.png";
 import Alert from "../components/alert";
 import Button from "../components/button";
 import Input from "../components/input";
@@ -14,7 +16,7 @@ const SettingInfo = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [infoArr, setInfoArr] = useState();
   const [_classNameAlert, setClassNameAlert] = useState("hidden");
-  const { register, handleSubmit, control } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm({
     defaultValues: defaultValue,
   });
   const { fields, append, remove, update } = useFieldArray({
@@ -53,13 +55,7 @@ const SettingInfo = () => {
     remove(index);
   };
   return (
-    <div className="mx-auto px-[5%] lg:px-[10%] py-[2%]">
-      <div className="flex justify-center mb-10">
-        <span className="text-[#000] font-medium text-center uppercase text-4xl">
-          generate QR Code App
-        </span>
-      </div>
-
+    <div className="mx-auto px-[5%] lg:px-[10%]">
       {/* ================== QR CODE MOBILE ================ */}
       {isSaved ? (
         <div
@@ -93,7 +89,7 @@ const SettingInfo = () => {
             {fields.map((_elt, index) => (
               <div key={index} className="mb-3">
                 <div className="flex justify-between items-center">
-                  <Label content={_elt.label} index={index} update={update} />
+                  <Label content={_elt.label} index={index} update={update} setValue={setValue} />
                   {fields.length === 1 ? null : (
                     <button
                       onClick={() => handleDeleteFied(index)}
@@ -118,6 +114,7 @@ const SettingInfo = () => {
                 <Button
                   onChange={handleAddField}
                   content="Thêm thông tin"
+                  icon={plusIcon}
                   className={
                     "bg-gray-800 p-3 text-white rounded-md hover:bg-green-800 transition-all duration-300"
                   }
@@ -125,6 +122,7 @@ const SettingInfo = () => {
                 <Button
                   type="submit"
                   content="Lưu thông tin"
+                  icon={submitIcon}
                   className={
                     "bg-green-800 p-3 text-white rounded-md hover:bg-gray-800 transition-all duration-300"
                   }
@@ -152,9 +150,10 @@ const SettingInfo = () => {
             <div className="flex justify-center mt-2">
               <button
                 onClick={() => downloadQR(BASE_URL, infoArr.id)}
-                className="bg-green-800 p-3 text-white rounded-lg mt-2 hover:bg-gray-600 transition-all hover:scale-105 duration-200"
+                className="bg-green-800 p-3 text-white rounded-lg mt-2 hover:bg-gray-600 transition-all hover:scale-105 duration-200 flex items-center gap-2"
               >
-                DownloadQR
+                <img src={downloadIcon} width={25} />
+                <span>DownloadQR</span>
               </button>
             </div>
           </div>

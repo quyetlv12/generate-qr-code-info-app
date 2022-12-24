@@ -5,8 +5,8 @@ import './asset/css/index.css'
 import './asset/css/theme.css'
 
 function App() {
-      <Router />
-  ;
+  console.log( <Router />);
+  <Router />
 }
 
 export default App;
