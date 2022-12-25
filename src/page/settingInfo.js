@@ -12,14 +12,15 @@ import Label from "../components/label";
 import { UserService } from "../services";
 import { defaultValue } from "./hookFormConfig";
 import { downloadQR } from "./utility";
+import { Link } from "react-router-dom";
 const SettingInfo = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [infoArr, setInfoArr] = useState();
   const [_classNameAlert, setClassNameAlert] = useState("hidden");
-  const { register, handleSubmit, control, setValue } = useForm({
+  const { register, handleSubmit, control, setValue  , } = useForm({
     defaultValues: defaultValue,
   });
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove, update ,  } = useFieldArray({
     control,
     name: "info",
   });
@@ -56,7 +57,7 @@ const SettingInfo = () => {
   };
   return (
     <div className="mx-auto px-[5%] lg:px-[10%]">
-      {/* ================== QR CODE MOBILE ================ */}
+      {/* ================ QR CODE MOBILE ================ */}
       {isSaved ? (
         <div
           className={` block w-full lg:hidden  duration-500 transition-all scale-100`}
@@ -82,7 +83,7 @@ const SettingInfo = () => {
           </div>
         </div>
       ) : null}
-      {/* =================== FIELD =================== */}
+      {/* ===================CUSTOM FIELD =================== */}
       <div className="flex">
         <div className={`${!isSaved ? "w-full" : "w-full lg:w-[70%]"} `}>
           <form onSubmit={handleSubmit(onSubmit)}>

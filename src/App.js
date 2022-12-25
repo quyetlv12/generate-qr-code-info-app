@@ -1,12 +1,11 @@
 
-import { Router } from "react-router-dom";
 import "./App.css";
 import './asset/css/index.css'
 import './asset/css/theme.css'
+import Routes from "./router";
 
 function App() {
-  console.log( <Router />);
-  <Router />
+  return <Routes />
 }
 
 export default App;
