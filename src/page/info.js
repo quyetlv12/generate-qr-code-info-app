@@ -1,7 +1,6 @@
 import React from "react";
 import QRCode from "react-qr-code";
 const Info = () => {
-  const BASE_URL = window.location.href;
   return (
     <div className="mx-auto px-[10%] py-[2%]">
       <div className="flex justify-center mb-20">

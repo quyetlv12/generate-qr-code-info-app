@@ -12,15 +12,19 @@ import Label from "../components/label";
 import { UserService } from "../services";
 import { defaultValue } from "./hookFormConfig";
 import { downloadQR } from "./utility";
-import { Link } from "react-router-dom";
+import styled from "styled-components";
+const SettingPageStyled = styled.div`
+  background-color: #EEEEEE;
+  height: 100% !important;
+`
 const SettingInfo = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [infoArr, setInfoArr] = useState();
   const [_classNameAlert, setClassNameAlert] = useState("hidden");
-  const { register, handleSubmit, control, setValue  , } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm({
     defaultValues: defaultValue,
   });
-  const { fields, append, remove, update ,  } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: "info",
   });
@@ -56,7 +60,7 @@ const SettingInfo = () => {
     remove(index);
   };
   return (
-    <div className="mx-auto px-[5%] lg:px-[10%]">
+    <SettingPageStyled className="mx-auto px-[5%] lg:px-[10%]">
       {/* ================ QR CODE MOBILE ================ */}
       {isSaved ? (
         <div
@@ -88,9 +92,14 @@ const SettingInfo = () => {
         <div className={`${!isSaved ? "w-full" : "w-full lg:w-[70%]"} `}>
           <form onSubmit={handleSubmit(onSubmit)}>
             {fields.map((_elt, index) => (
-              <div key={index} className="mb-3">
-                <div className="flex justify-between items-center">
-                  <Label content={_elt.label} index={index} update={update} setValue={setValue} />
+              <div key={index} className="mb-3 relative">
+                <div className="flex justify-between items-center ">
+                  <Label
+                    content={_elt.label}
+                    index={index}
+                    update={update}
+                    setValue={setValue}
+                  />
                   {fields.length === 1 ? null : (
                     <button
                       onClick={() => handleDeleteFied(index)}
@@ -110,8 +119,9 @@ const SettingInfo = () => {
                 />
               </div>
             ))}
-            {fields.length === 10 ? null : (
-              <div className="flex justify-end gap-5">
+
+            <div className="flex justify-end gap-5 mb-10">
+              {fields.length === 10 ? null : (
                 <Button
                   onChange={handleAddField}
                   content="Thêm thông tin"
@@ -120,16 +130,16 @@ const SettingInfo = () => {
                     "bg-gray-800 p-3 text-white rounded-md hover:bg-green-800 transition-all duration-300"
                   }
                 />
-                <Button
-                  type="submit"
-                  content="Lưu thông tin"
-                  icon={submitIcon}
-                  className={
-                    "bg-green-800 p-3 text-white rounded-md hover:bg-gray-800 transition-all duration-300"
-                  }
-                />
-              </div>
-            )}
+              )}
+              <Button
+                type="submit"
+                content="Lưu thông tin"
+                icon={submitIcon}
+                className={
+                  "bg-green-800 p-3 text-white rounded-md hover:bg-gray-800 transition-all duration-300"
+                }
+              />
+            </div>
           </form>
         </div>
         {/* ================== QR CODE DESKTOP ================ */}
@@ -161,7 +171,7 @@ const SettingInfo = () => {
         ) : null}
       </div>
       <Alert _classNameAlert={_classNameAlert} />
-    </div>
+    </SettingPageStyled>
   );
 };
 
